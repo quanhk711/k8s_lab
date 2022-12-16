@@ -1,0 +1,40 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+NETWORK_CONTROL="192.168.56.10"
+SSH_PUB_KEY = File.readlines("#{Dir.home}/.ssh/id_rsa.pub").first.strip
+USER_NAME = quan
+
+Vagrant.configure("2") do |config|
+  config.vm.provision "shell", inline: <<-SHELL
+  sed -i "/^.*controller$/d" /etc/hosts
+  echo "#{NETWORK_CONTROL} controller" >> /etc/hosts
+  ufw allow 22/tcp
+  useradd -s /bin/bash -d /home/${USER_NAME}/ -m -G sudo ${USER_NAME}
+  echo '${USER_NAME} ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+  mkdir -p /home/${USER_NAME}/.ssh && echo #{SSH_PUB_KEY} >> /home/${USER_NAME}/.ssh/authorized_keys
+  chown -R ${USER_NAME} /home/${USER_NAME}/.ssh
+  sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+  systemctl restart sshd
+  SHELL
+  config.vm.box = "ubuntu/focal64"
+  config.vm.box_check_update = false
+
+  config.vm.define "controller" do |controller|
+    controller.vm.hostname = "controller"
+    controller.vm.network "private_network", ip: NETWORK_CONTROL
+
+    controller.vm.provision "shell", inline: <<-SHELL
+      curl -LO https://go.dev/dl/go1.18.2.linux-amd64.tar.gz
+      rm -rf /usr/local/go && tar -C /usr/local -xzf go1.18.2.linux-amd64.tar.gz
+      echo "export PATH=\$PATH:/usr/local/go/bin" >> /etc/profile
+    SHELL
+    
+    controller.vm.provider "virtualbox" do |vb|
+      vb.gui = false
+      vb.memory = "4096"
+      vb.cpus = 3
+    end    
+  end
+
+end
