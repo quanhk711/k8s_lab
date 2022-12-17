@@ -7,7 +7,7 @@ NETWORK="192.168.56."
 NUM_CONTROLLER_NODES=1
 NUM_WORKER_NODES=1
 SSH_PUB_KEY_NAME = "id_rsa.pub"
-USER_NAME = quan
+USER_NAME = "quan"
 
 Vagrant.configure("2") do |config|
   vagrant_root = File.dirname(__FILE__)
