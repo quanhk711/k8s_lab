@@ -32,4 +32,9 @@ cd single_node/setup_vm
 ```bash 
 cd single_node/setup_vm 
     vagrant destroy
-``` 
+```
+
+## Mount file to vm
+```ruby
+  config.vm.synced_folder "#{vagrant_root}/../..", "/home/#{USER_NAME}", disabled: false
+```

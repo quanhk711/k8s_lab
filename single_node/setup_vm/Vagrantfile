@@ -8,6 +8,7 @@ USER_NAME = "quan"
 Vagrant.configure("2") do |config|
   vagrant_root = File.dirname(__FILE__)
   ssh_pub_key = File.readlines("#{vagrant_root}/../../#{SSH_PUB_KEY_NAME}").first.strip
+  config.vm.synced_folder "#{vagrant_root}/../..", "/home/#{USER_NAME}", disabled: false
   config.vm.provision "shell", inline: <<-SHELL
   sed -i "/^.*controller$/d" /etc/hosts
   echo "#{NETWORK_CONTROL} controller" >> /etc/hosts
