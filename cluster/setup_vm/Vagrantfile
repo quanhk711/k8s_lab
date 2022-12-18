@@ -6,24 +6,12 @@ WORKER_IP_START=50
 NETWORK="192.168.56."
 NUM_CONTROLLER_NODES=1
 NUM_WORKER_NODES=1
-SSH_PUB_KEY_NAME = "id_rsa.pub"
-USER_NAME = "quan"
+
 
 Vagrant.configure("2") do |config|
   vagrant_root = File.dirname(__FILE__)
-  ssh_pub_key = File.readlines("#{vagrant_root}/../../#{SSH_PUB_KEY_NAME}").first.strip
   config.vm.synced_folder "#{vagrant_root}/../..", "/home/#{USER_NAME}", disabled: false
   config.vm.provision "shell", privileged: "true", inline: <<-SHELL
-    ufw allow 22/tcp
-    useradd -s /bin/bash -d /home/#{USER_NAME}/ -m -G sudo #{USER_NAME}
-    echo '#{USER_NAME} ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
-    mkdir -p /home/#{USER_NAME}/.ssh && echo #{ssh_pub_key} >> /home/#{USER_NAME}/.ssh/authorized_keys
-    chown -R #{USER_NAME} /home/#{USER_NAME}/.ssh
-    chmod 700 /home/#{USER_NAME}/.ssh/
-    chmod 600 /home/#{USER_NAME}/.ssh/authorized_keys
-    sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
-    systemctl restart sshd
-
     for i in $(seq 1 #{NUM_CONTROLLER_NODES})
     do
       sed -i "/^.*controller-${i}$/d" /etc/hosts
@@ -35,8 +23,8 @@ Vagrant.configure("2") do |config|
       sed -i "/^.*worker-${i}$/d" /etc/hosts
       echo "#{NETWORK}$((#{WORKER_IP_START}+i))  worker-${i}" >>  /etc/hosts
     done
-    
   SHELL
+
   config.vm.box = "ubuntu/focal64"
   config.vm.box_check_update = false
 
@@ -69,10 +57,7 @@ Vagrant.configure("2") do |config|
       node.vm.provider "virtualbox" do |vb|
           vb.memory = 2048
           vb.cpus = 1
-          # vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       end
-      # node.vm.provision "shell", path: "scripts/common.sh"
-      # node.vm.provision "shell", path: "scripts/node.sh"
     end
   end
   
