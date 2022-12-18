@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
   chown -R #{USER_NAME} /home/#{USER_NAME}/.ssh
   chmod 700 /home/#{USER_NAME}/.ssh/
   chmod 600 /home/#{USER_NAME}/.ssh/authorized_keys
-  USER
+USER
 
   sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
   systemctl restart sshd
@@ -44,7 +44,7 @@ Vagrant.configure("2") do |config|
       vb.gui = false
       vb.memory = "4096"
       vb.cpus = 3
-    end    
+    end
   end
 
 end
