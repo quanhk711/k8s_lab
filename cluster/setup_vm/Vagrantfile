@@ -6,14 +6,20 @@ WORKER_IP_START=50
 NETWORK="192.168.56."
 NUM_CONTROLLER_NODES=1
 NUM_WORKER_NODES=1
-
+USER_NAME = "vagrant"
 
 Vagrant.configure("2") do |config|
   vagrant_root = File.dirname(__FILE__)
   config.vm.synced_folder "#{vagrant_root}/../..", "/home/#{USER_NAME}", disabled: false
   config.vm.provision "shell", privileged: "true", inline: <<-SHELL
-    sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
-    systemctl restart sshd
+  ufw allow 22/tcp
+  echo '#{USER_NAME} ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+  mkdir -p /home/#{USER_NAME}/.ssh && echo #{ssh_pub_key} >> /home/#{USER_NAME}/.ssh/authorized_keys
+  chown -R #{USER_NAME} /home/#{USER_NAME}/.ssh
+  chmod 0700 /home/#{USER_NAME}/.ssh/
+  chmod 0600 /home/#{USER_NAME}/.ssh/authorized_keys
+  sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+  systemctl restart sshd
     
     for i in $(seq 1 #{NUM_CONTROLLER_NODES})
     do
