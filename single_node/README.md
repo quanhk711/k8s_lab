@@ -34,5 +34,6 @@ sudo bash scripts/bootstrap-kubelet-cr.sh
 # Verify 
 ```bash
 export KUBECONFIG=/vagrant/artifacts/cfg/admin.kubeconfig
+kubectl get node
 kubectl run alpine --image=alpine:latest --command -- sleep 3600
 ```
