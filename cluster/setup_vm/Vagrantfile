@@ -10,6 +10,7 @@ USER_NAME = "vagrant"
 
 Vagrant.configure("2") do |config|
   vagrant_root = File.dirname(__FILE__)
+  ssh_pub_key = File.readlines("#{vagrant_root}/../../id_rsa.pub").first.strip
   config.vm.synced_folder "#{vagrant_root}/../..", "/home/#{USER_NAME}", disabled: false
   config.vm.provision "shell", privileged: "true", inline: <<-SHELL
   ufw allow 22/tcp
