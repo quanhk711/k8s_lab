@@ -102,14 +102,6 @@ function remove_containerd() {
   rm -rf  /etc/containerd/ /bin/containerd* /usr/local/bin/runc /usr/local/bin/crictl /etc/systemd/system/containerd.service /etc/containerd/config.toml
 }
 
-uninstall_cfssl
-uninstall_kubectl
-uninstall_helm
-remove_etcd
-remove_kube_apiserver
-remove_controller_manager
-remove_kube_scheduler
-remove_binary_control_plan
 remove_cni_plugins
 remove_kubelet
 remove_kube_proxy

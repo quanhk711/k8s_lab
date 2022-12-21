@@ -2,7 +2,6 @@
 
 set -euxo pipefail
 
-
 function uninstall_cfssl() {
   if [[ ! -f /usr/local/bin/cfssl ]]
   then
@@ -110,7 +109,3 @@ remove_kube_apiserver
 remove_controller_manager
 remove_kube_scheduler
 remove_binary_control_plan
-remove_cni_plugins
-remove_kubelet
-remove_kube_proxy
-remove_containerd
