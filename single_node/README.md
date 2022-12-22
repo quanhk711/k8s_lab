@@ -2,6 +2,14 @@
 ```bash
 vagrant up
 ```
+if provisioning fail!
+```bash
+vagrant reload controller 
+```
+update VM
+```bash
+vagrant reload controller --provision
+```
 2. Install tools
 ```bash
 vagrant ssh controller-1
