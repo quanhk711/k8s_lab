@@ -1,6 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
+  namespace: default
   name: nginx-2
   labels:
     app: demo-p-to-s
@@ -26,7 +27,6 @@ metadata:
   name: nginx-service
   namespace: default
 spec:
-  clusterIP: 10.32.0.10
   selector:
     app: demo-p-to-s
   ports:
