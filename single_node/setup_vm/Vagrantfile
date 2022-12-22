@@ -8,6 +8,7 @@ Vagrant.configure("2") do |config|
   vagrant_root = File.dirname(__FILE__)
   ssh_pub_key = File.readlines("#{vagrant_root}/../../id_rsa.pub").first.strip
   config.vm.synced_folder "#{vagrant_root}/..", "/vagrant", disabled: false
+  config.vm.synced_folder "#{vagrant_root}/../../demo", "/vagrant/demo", disabled: false
   config.vm.provision "shell", privileged: "false", inline: <<-SHELL
   sed -i "/^.*controller$/d" /etc/hosts
   echo "#{NETWORK_CONTROL} controller" >> /etc/hosts
