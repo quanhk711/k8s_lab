@@ -37,7 +37,10 @@ vagrant ssh worker-1
 cd /vagrant
 sudo bash scripts/bootstrap-worker.sh
 ```
-
+7. Deploy Calico CNI
+vagrant ssh controller-1
+cd /vagrant
+sudo bash scripts/deploy-calico-cni.sh
 # Verify 
 ```bash
 vagrant ssh controller-1
