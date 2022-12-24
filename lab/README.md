@@ -210,3 +210,8 @@ EOF
 ```
 9. access 2nd nginx
 open browser with domain <ip_vm>:30008
+
+10. delete pod
+```bash
+k delete pod nginx-node-port
+```
