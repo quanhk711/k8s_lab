@@ -14,6 +14,8 @@ vi ~/.bashrc
 | node    | no   |
 | pod| po    |
 | service    | svc    |
+| deployment    | deploy    |
+| replicaset    | rs    |
 
 
 ## kubectl commands
@@ -61,6 +63,55 @@ vi ~/.bashrc
 `kubectl delete -f nginx-deployment.yaml`
 
 # Practice
+## create replicaset
+1. create replicaset nginx
+```bash
+cat <<EOF | kubectl apply -f -
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: frontend
+  labels:
+    app: guestbook
+    tier: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+EOF
+```
+2. create new pod with the same label
+```bash
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-single
+  labels:
+    app: pod-single
+    tier: frontend
+spec:
+  containers:
+  - name: busybox
+    image: busybox:1.2.1
+EOF
+```
+3. see what will happen
+
+4. delete replicaset 
+```bash
+kubectl delete replicaset.apps/frontend
+```
+
 ## create deployment
 1. create deployment nginx
 ```bash
