@@ -107,9 +107,16 @@ EOF
 ```
 3. see what will happen
 
-4. delete replicaset 
+4. scaling replicaset
+```bash
+kubectl scale --replicas=3 rs frontend
+```
+
+5. delete replicaset 
 ```bash
 kubectl delete replicaset.apps/frontend
+# or
+kubectl delete rs frontend
 ```
 
 ## create deployment
