@@ -13,10 +13,8 @@ vi ~/.bashrc
 |:----------|:----------|
 | node    | no   |
 | pod| po    |
-| service    | svc    |
-
-
-
+| service    | svc   |
+| deployment    | deploy  |
 
 1. display a list of contexts
 ```bash
